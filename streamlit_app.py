@@ -105,4 +105,4 @@ st.write(contribution_df)
 # Video
 st.header("Video")
 st.write("Project overview:")
-st.video("https://www.youtube.com/watch?v=3eKj4Z7qT6w&ab_channel=KhushiGupta")
+st.video("https://youtu.be/85ITAo7nqgM")
