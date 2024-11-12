@@ -52,8 +52,16 @@ st.markdown("""
 st.subheader("_Machine Learning Models_")
 st.markdown("""
 - Supervised learning LinearRegression model is applicable since we have clearly defined attributes (median household income, price, location, etc) and a target value (price of the house).
-- Unsupervised models like K-means would uncover relations between attributes and help identify unique insights. We could use a hybrid stacking model by mixing this model with a supervised model.
-- Supervised learning model RandomForest constructs several decision trees and returns an average prediction and ranks features based on importance in predictions; this is a robust solution for our nonlinear dataset.
+""")
+
+st.write("""
+For our implemented solution, we incorporated LinearRegression and MLPRegressor (Neural Network) ML models to predict the housing price based on the features we provided to the models. For choosing the model, we tried many models like random forest etc, but we found that LinearRegression and MLPRegressor were the most consistent and statistically valid. Supervised learning LinearRegression and Neural Network model are applicable since we have clearly defined attributes (median household income, price, location, etc) and a target value (price of the house). We also chose to test these models because Vineeth et al. (2018) evaluates linear regression and neural networks where the model takes in square foot of living, number of bedrooms, bathrooms, year build, and number of floors, but does not take longitude, latitude, and mean income for consideration which our dataset contains. Additionally, the dataset from the paper contains data from King County, but our model’s data contains data from California and New York City which allows us to see how our model would perform from two distinct locations. 
+""")
+st.write("""
+For data preprocessing, we used sklearn StandardScaler to standardize numerical data features for the machine learning models while also utilizing feature selection to keep only relevant features such as median_income and remove unnecessary features such as address. We also used pandas to create DataFrames to merge the two datasets. In addition to this, since we are combining 2 datasets, we needed to handle missing data with some NaN values that were replaced with empty string and 0 values to ensure data stayed consistent and wasn’t lost during preprocessing. We also utilized TfidfVectorizer from sklearn to identify significant words from the CSV file, which in our case was used to identify the California and New York dataset when we combine the data with our features.
+""")
+st.write("""
+We split the data for the model using train_test_split() where we split the data into 80% train and 20% test. For scaling for the Neural Network model, we used Sklearn StandardScaler with fit_transform() on our training data and transform() on our testing data. After splitting the data, we trained the model using the MLPRegressor model from sklearn with 100 hidden layers and 500 iterations and the fit method on our x and y train data. For the LinearRegression model, there was no scaling and we used sklearn LinearRegression and the fit method on the x and y train data.
 """)
 
 # Results and Discussion
@@ -76,6 +84,24 @@ st.subheader("_Expected Results_")
 st.write("""
 Linear Regression provides reliable price predictions, minimizing error and explaining most price variability, though it may struggle with non-linear relationships. K-means can capture more complex patterns, while RandomForest highlights the most influential features for predicting housing prices.
 """)
+st.image("pca.png", caption="", use_column_width=True)
+st.write("""
+This displays the PCA visualization for our combined housing dataset reduced to two principal components. The color bar represents the range of normalized median house values based on the geographical influence. 
+""")
+st.write("""
+We used Mean Squared Error (MSE) and R-squared correlation as the quantitative scoring metrics for both models. 
+""")
+st.image("mse.png", caption="", use_column_width=True)
+st.write("""
+Mean Squared Error (MSE) measures the average squared differences between the actual values and predicted values. MSE is chosen as a metric because it penalizes larger errors more than smaller ones, making it sensitive to outliers. It is a valuable metric to indicate how well a model is performing, with lower values implying better fit – ideally close to 0. We train two models, a Linear Regression model and MLP Regressor, to predict normalized housing values. The visualization shows that the Linear Regression Model has a MSE of 0.0186 and the MLP Regressor Model achieved a slightly lower MSE of 0.0175, reflecting that the performance of both models is highly accurate and fits the housing data well. This could likely result from the longitude and latitude features of the dataset being good identifiers that the models can use for more accurate prediction of the price of a home. Additionally, the California Dataset contains median incomes, which is an important indicator of housing prices, contributing to the accuracy of both models. Overall, the performance of the MLP Regressor model is more accurate with a lower MSE because of its neural network structure, which uses hidden layers to train and optimize weights, allowing it to capture complex relationships that the Linear Regression model cannot. 
+""")
+st.image("rsquared.png", caption="", use_column_width=True)
+st.write("""
+The R squared value is a representation of how well the model fits the data based on how well the model's inputs account for changes in the predicted data. The R squared value is an integer ranging from 0 to 1 and the higher the value, the better the model fits the data. This metric is appropriate for determining the quality of the linear regression model and MLP regressor model because it indicates how well the model explains the variability in the predicted house prices. After running the two models on the housing data, the visualization for this metric shows an R squared value of around 0.12 for linear regression and an R squared value of 0.17 for MLP regressor. Given that the scores are low, this indicates that both models explain only a small portion of the variation of the housing prices, which means they are not capturing the key factors that impact the data. These low R squared values could likely be due to insufficient features in the housing data as it doesn’t include variables such as crime rates, proximity to business districts, school ratings, or age of the home which are reflective of housing markets. Additionally, the California dataset includes the median income while the New York dataset doesn’t, and the New York dataset includes the type of home which the California dataset doesn’t, and this could have also led to a variation in the housing predictions. Overall, while the MLP regressor has a higher R-squared and is better suited for non-linear relationships, neither model provides highly accurate predictions, which suggests that adjustments are needed to the features included in the data.
+""")
+st.write("""
+For the next steps in improving the performance of our models on the housing dataset, we plan to focus on hyperparameter tuning and model expansion. Specifically, we will experiment with various hidden layer sizes, learning rates, maximum iterations, and activation functions to optimize the MLP regressor. Additionally, we will apply cross-validation techniques to improve the accuracy of our model metrics. To improve the performance of our initial models, we also plan to expand the dataset by adding additional features indicative of the housing market, such as public transportation and employment rates. Through these steps, we hope to develop the models and obtain more accurate housing predictions.
+""")
 
 # References
 st.header("References")
@@ -97,7 +123,11 @@ st.markdown("""
 st.header("Contribution Table")
 contribution_data = {
     'Team Member': ['Ashmitha Aravind', 'Khushi Gupta', 'Natasha Setidadi', 'Vonesha Shaik', 'Chrystabel Sunata'],
-    'Contribution': ['Worked on the problem statement and collaborated on the gantt chart.', 'Worked on metrics section, results and discussion. Edited the video.', 'Worked on the introduction and literature review.', 'Worked on methods preprocessing and models. Worked on the streamlit project.', 'Worked on methods preprocessing section with Esha. Worked on dataset descriptions.']
+    'Contribution': ['Worked on PCA plot, fixed bugs with dataset setup, worked on analysis of visualizations of both models .', 
+                     'Worked on regression model as well as metric evaluation and visualization', 
+                     'Worked on writing methods section, fixed bugs with the linear vs mlpregressor model visualization',
+                     'Worked on pulling datasets, cleaning data, preprocessing data, mlpregressor model, updating streamlit proposal.', 
+                     'Worked on PCA plot, fixed bugs with dataset setup, worked on analysis of visualization of both models.']
 }
 contribution_df = pd.DataFrame(contribution_data)
 st.write(contribution_df)
